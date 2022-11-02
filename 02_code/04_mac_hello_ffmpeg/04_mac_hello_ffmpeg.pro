@@ -59,8 +59,8 @@ linux: {
 #        -lavresample
 
 mac: {
-    FFMPEG_HOME = /usr/local/Cellar/ffmpeg/4.3.2
-
+#    FFMPEG_HOME = /usr/local/Cellar/ffmpeg/4.3.2
+     FFMPEG_HOME = /usr/local/ffmpeg
     INCLUDEPATH += $${FFMPEG_HOME}/include
     LIBS += -L $${FFMPEG_HOME}/lib \
             -lavcodec \
@@ -68,10 +68,10 @@ mac: {
             -lavfilter \
             -lavformat \
             -lavutil \
-            -lpostproc \
-            -lswscale \
-            -lswresample \
-            -lavresample
+            -lpostproc
+#            -lswscale \
+#            -lswresample \
+#            -lavresample
 }
 
 # message()可以用来打印

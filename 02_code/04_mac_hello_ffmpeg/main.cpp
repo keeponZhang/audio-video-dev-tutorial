@@ -8,7 +8,7 @@ extern "C" {
 }
 
 int main(int argc, char *argv[]) {
-    qDebug() << av_version_info();
+    qDebug() << "keepon"<<av_version_info();
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

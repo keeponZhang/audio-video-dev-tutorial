@@ -16,15 +16,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ffmpegs.cpp \
     main.cpp \
-    mainwindow.cpp \
-    yuvplayer.cpp
+    mainwindow.cpp
 
 HEADERS += \
-    ffmpegs.h \
-    mainwindow.h \
-    yuvplayer.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui
@@ -35,15 +31,26 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 win32 {
-    FFMPEG_HOME = F:/Dev/msys64/usr/local/ffmpeg
+    FFMPEG_HOME = ..
 }
 
-mac {
+macx {
     FFMPEG_HOME = /usr/local/ffmpeg
+     INFO_PLIST    = /Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/myapp/info.plist
+
+       Info_plist.target   =   $${INFO_PLIST}
+       Info_plist.depends  =  $${INFO_PLIST} $${TARGET}.app/Contents/Info.plist
+       Info_plist.commands =   @$(DEL_FILE) $${TARGET}.app/Contents/Info.plist$$escape_expand(\n\t) \
+                               @$(SED) -e "s,@VERSION@,$$VERSION,g"   $${INFO_PLIST} > $${TARGET}.app/Contents/Info.plist
+       QMAKE_EXTRA_TARGETS +=  Info_plist
+       PRE_TARGETDEPS      +=  $$Info_plist.target
+
+
 }
 
 INCLUDEPATH += $${FFMPEG_HOME}/include
 
-LIBS += -L$${FFMPEG_HOME}/lib \
-        -lavutil \
-        -lswscale
+LIBS += -L $${FFMPEG_HOME}/lib \
+        -lavdevice \
+        -lavformat \
+        -lavutil
