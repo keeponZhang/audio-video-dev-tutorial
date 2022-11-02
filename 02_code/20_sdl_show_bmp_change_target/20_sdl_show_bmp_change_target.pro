@@ -37,7 +37,8 @@ win32 {
 }
 
 mac {
-    SDL_HOME = /usr/local/Cellar/sdl2/2.0.14_1
+SDL_HOME = /opt/homebrew/Cellar/sdl2/2.24.1
+
 }
 
 INCLUDEPATH += $${SDL_HOME}/include
