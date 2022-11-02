@@ -8,4 +8,8 @@
 /build-11_sdl_play_pcm-Desktop_arm_darwin_generic_mach_o_64bit-Debug
 /build-12_pcm_to_wav-Desktop_arm_darwin_generic_mach_o_64bit-Debug
 /build-13_audio_resample-Desktop_arm_darwin_generic_mach_o_64bit-Debug
+/build-14_sdl_play_wav-Desktop_arm_darwin_generic_mach_o_64bit-Debug
+/build-15_record_audio_wav-Desktop_arm_darwin_generic_mach_o_64bit-Debug
+/build-16_aac_encode-Desktop_arm_darwin_generic_mach_o_64bit-Debug
+/build-17_aac_decode-Desktop_arm_darwin_generic_mach_o_64bit-Debug
 /build-25_yuv_player_qt-Desktop_arm_darwin_generic_mach_o_64bit-Debug

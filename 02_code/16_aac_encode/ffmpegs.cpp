@@ -73,7 +73,7 @@ void FFmpegs::aacEncode(AudioEncodeSpec &in,
     int ret = 0;
 
     // 编码器
-    AVCodec *codec = nullptr;
+   const AVCodec *codec = nullptr;
 
     // 编码上下文
     AVCodecContext *ctx = nullptr;

@@ -22,10 +22,10 @@ AudioThread::~AudioThread() {
 
 void AudioThread::run() {
     AudioEncodeSpec in;
-    in.filename = "F:/in.pcm";
+    in.filename = "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/16_aac_encode/in.pcm";
     in.sampleRate = 44100;
     in.sampleFmt = AV_SAMPLE_FMT_S16;
     in.chLayout = AV_CH_LAYOUT_STEREO;
 
-    FFmpegs::aacEncode(in, "F:/out.aac");
+    FFmpegs::aacEncode(in, "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/16_aac_encode/out.aac");
 }

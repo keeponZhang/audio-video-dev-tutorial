@@ -72,7 +72,7 @@ void FFmpegs::aacDecode(const char *inFilename,
     QFile outFile(out.filename);
 
     // 解码器
-    AVCodec *codec = nullptr;
+    const AVCodec *codec = nullptr;
     // 上下文
     AVCodecContext *ctx = nullptr;
     // 解析器上下文

@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QFile>
 
-#define FILENAME "/Users/mj/Desktop/in.wav"
+#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/14_sdl_play_wav/in.wav"
 
 /*
 

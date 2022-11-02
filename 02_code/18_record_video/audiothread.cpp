@@ -24,7 +24,7 @@ extern "C" {
 #else
     #define FMT_NAME "avfoundation"
     #define DEVICE_NAME "0"
-    #define FILEPATH "/Users/mj/Desktop/out.yuv"
+    #define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/18_record_video/out.yuv"
 #endif
 
 #define ERROR_BUF(ret) \
@@ -55,7 +55,7 @@ void AudioThread::run() {
     qDebug() << this << "开始执行----------";
 
     // 获取输入格式对象
-    AVInputFormat *fmt = av_find_input_format(FMT_NAME);
+   const AVInputFormat *fmt = av_find_input_format(FMT_NAME);
     if (!fmt) {
         qDebug() << "av_find_input_format error" << FMT_NAME;
         return;
