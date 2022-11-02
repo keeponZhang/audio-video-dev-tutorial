@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QFile>
 
+#ifdef Q_OS_WIN
 #define FILENAME "F:/in.pcm"
 // 采样率
 #define SAMPLE_RATE 44100
@@ -19,6 +20,27 @@
 #define BYTES_PER_SAMPLE ((SAMPLE_SIZE * CHANNELS) >> 3)
 // 文件缓冲区的大小
 #define BUFFER_SIZE (SAMPLES * BYTES_PER_SAMPLE)
+#else
+#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/in.pcm"
+// 采样率
+// 采样率
+#define SAMPLE_RATE 44100
+// 采样格式
+#define SAMPLE_FORMAT AUDIO_S16LSB
+// 采样大小
+#define SAMPLE_SIZE SDL_AUDIO_BITSIZE(SAMPLE_FORMAT)
+// 声道数
+#define CHANNELS 2
+// 音频缓冲区的样本数量
+#define SAMPLES 1024
+// 每个样本占用多少个字节
+#define BYTES_PER_SAMPLE ((SAMPLE_SIZE * CHANNELS) >> 3)
+// 文件缓冲区的大小
+#define BUFFER_SIZE (SAMPLES * BYTES_PER_SAMPLE)
+#endif
+
+
+
 
 typedef struct {
     int len = 0;

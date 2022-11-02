@@ -39,8 +39,16 @@ win32 {
 }
 
 macx {
-    FFMPEG_HOME = /usr/local/Cellar/ffmpeg/4.3.2
-    QMAKE_INFO_PLIST = mac/Info.plist
+FFMPEG_HOME = /usr/local/ffmpeg
+ INFO_PLIST    = /Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/myapp/info.plist
+
+   Info_plist.target   =   $${INFO_PLIST}
+   Info_plist.depends  =  $${INFO_PLIST} $${TARGET}.app/Contents/Info.plist
+   Info_plist.commands =   @$(DEL_FILE) $${TARGET}.app/Contents/Info.plist$$escape_expand(\n\t) \
+                           @$(SED) -e "s,@VERSION@,$$VERSION,g"   $${INFO_PLIST} > $${TARGET}.app/Contents/Info.plist
+   QMAKE_EXTRA_TARGETS +=  Info_plist
+   PRE_TARGETDEPS      +=  $$Info_plist.target
+
 }
 
 INCLUDEPATH += $${FFMPEG_HOME}/include

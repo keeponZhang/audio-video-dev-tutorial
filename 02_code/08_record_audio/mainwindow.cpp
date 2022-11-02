@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QThread>
+#include <unistd.h>
 
 extern "C" {
 // 设备
@@ -24,7 +25,7 @@ extern "C" {
 #else
     #define FMT_NAME "avfoundation"
     #define DEVICE_NAME ":0"
-    #define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/avbase/out.pcm"
+    #define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/out.pcm"
 #endif
 
 MainWindow::MainWindow(QWidget *parent)
@@ -76,16 +77,45 @@ void MainWindow::on_audioButton_clicked() {
     }
 
     // 采集的次数
-    int count = 50;
+    int count = 10;
 
     // 数据包
-    AVPacket pkt;
+//    AVPacket pkt;
     // 不断采集数据
-    while (count-- > 0 && av_read_frame(ctx, &pkt) == 0) {
-        // 将数据写入文件
-        file.write((const char *) pkt.data, pkt.size);
-    }
 
+    AVPacket *pkt = av_packet_alloc();
+
+    while (count > 0  ) {
+
+        if (ret == 0) { // 读取成功
+            // 将数据写入文件
+
+            file.write((const char *) pkt->data, pkt->size);
+            count--;
+
+        } else if (ret == AVERROR(EAGAIN)) { // 资源临时不可用
+            continue;
+        } else { // 其他错误
+            char errbuf[1024];
+            av_strerror(ret, errbuf, sizeof (errbuf));
+            qDebug() << "av_read_frame error" << errbuf << ret;
+            break;
+        }
+          av_packet_unref(pkt);
+
+
+
+//        if(av_read_frame(ctx, pkt) != 0){
+//            sleep(1);
+//            continue;
+//        }
+//         qDebug() << "将数据写入文件" << FILENAME;
+//        // 将数据写入文件
+//        file.write((const char *) pkt->data, pkt->size);
+//        av_packet_unref(pkt);
+
+    }
+   qDebug() << "释放资源" << FILENAME;
     // 释放资源
     // 关闭文件
     file.close();

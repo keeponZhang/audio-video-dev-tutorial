@@ -24,7 +24,7 @@ extern "C" {
 #else
     #define FMT_NAME "avfoundation"
     #define DEVICE_NAME ":0"
-    #define FILEPATH "/Users/mj/Desktop/"
+    #define FILEPATH "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/out.pcm"
 #endif
 
 AudioThread::AudioThread(QObject *parent) : QThread(parent) {
@@ -70,7 +70,7 @@ void AudioThread::run() {
     qDebug() << this << "开始执行----------";
 
     // 获取输入格式对象
-    AVInputFormat *fmt = av_find_input_format(FMT_NAME);
+    const AVInputFormat *fmt = av_find_input_format(FMT_NAME);
     if (!fmt) {
         qDebug() << "获取输入格式对象失败" << FMT_NAME;
         return;
