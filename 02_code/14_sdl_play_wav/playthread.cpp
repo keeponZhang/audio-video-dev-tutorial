@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QFile>
 
-#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/14_sdl_play_wav/in.wav"
+#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/14_sdl_play_wav/48000_f32le_1.wav"
 
 /*
 
@@ -13,7 +13,7 @@
 // 文件缓冲区的大小
 #define BUFFER_SIZE (SAMPLES * BYTES_PER_SAMPLE)
 */
-
+//data,len都是会变的
 typedef struct {
     int len = 0;
     int pullLen = 0;
@@ -42,7 +42,7 @@ void pull_audio_data(void *userdata,
                      // 希望填充的大小(samples * format * channels / 8)
                      int len
                     ) {
-    qDebug() << "pull_audio_data" << len;
+    qDebug() << "pull_audio_data=" << len;
 
     // 清空stream（静音处理）
     SDL_memset(stream, 0, len);
@@ -54,7 +54,7 @@ void pull_audio_data(void *userdata,
     if (buffer->len <= 0) return;
 
     // 取len、bufferLen的最小值（为了保证数据安全，防止指针越界）
-    buffer->pullLen = (len > buffer->len) ? buffer->len : len;
+    buffer->pullLen = (len > (buffer->len)) ? buffer->len : len;
 
     // 填充数据
     SDL_MixAudio(stream,
@@ -83,12 +83,18 @@ void PlayThread::run() {
     Uint8 *data = nullptr;
     // PCM数据的长度
     Uint32 len = 0;
+//    传地址值进去
     if (!SDL_LoadWAV(FILENAME, &spec, &data, &len)) {
         qDebug() << "SDL_LoadWAV error" << SDL_GetError();
         // 清除所有的子系统
         SDL_Quit();
         return;
     }
+    qDebug() << "SDL_LoadWAV len=" << len;
+    qDebug() << "SDL_LoadWAV spec.freq=" << spec.freq;
+    qDebug() << "SDL_LoadWAV spec.channels=" << spec.channels;
+    qDebug() << "SDL_LoadWAV  spec.format=" << SDL_AUDIO_BITSIZE(spec.format)<<" SDL_AUDIO_ISLITTLEENDIAN="<<SDL_AUDIO_ISLITTLEENDIAN(spec.format);
+
 
     // 音频缓冲区的样本数量
     spec.samples = 1024;
@@ -120,10 +126,13 @@ void PlayThread::run() {
         // 只要从文件中读取的音频数据，还没有填充完毕，就跳过
         if (buffer.len > 0) continue;
 
+//        pcm数据已经全部放在data中了，这里不用读取
+
         // 文件数据已经读取完毕
         if (buffer.len <= 0) {
             // 剩余的样本数量
             int samples = buffer.pullLen / bytesPerSample;
+//            1s中有44100个样本
             int ms = samples * 1000 / spec.freq;
             SDL_Delay(ms);
             break;
@@ -132,6 +141,8 @@ void PlayThread::run() {
 
     // 释放WAV文件数据
     SDL_FreeWAV(data);
+//    不能这样，buffer.data是不断往后移动的
+//    SDL_FreeWAV(buffer.data);
 
     // 关闭设备
     SDL_CloseAudio();

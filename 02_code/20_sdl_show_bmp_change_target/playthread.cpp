@@ -10,22 +10,18 @@
         goto end; \
     }
 
-PlayThread::PlayThread(QObject *parent) : QThread(parent) {
-    connect(this, &PlayThread::finished,
-            this, &PlayThread::deleteLater);
+PlayThread::PlayThread(QObject *parent)  {
 
 }
 
 PlayThread::~PlayThread() {
-    disconnect();
-    requestInterruption();
-    quit();
-    wait();
+
 
     qDebug() << this << "析构了";
 }
-
+//自己创建纹理，在纹理上画
 SDL_Texture *PlayThread::createTexture(SDL_Renderer *renderer) {
+//    纹理是有格式的，这里也设置了大小
     SDL_Texture *texture = SDL_CreateTexture(
                                renderer,
                                SDL_PIXELFORMAT_ARGB32,
@@ -122,11 +118,12 @@ void PlayThread::run() {
         END(!renderer, SDL_CreateRenderer);
     }
 
-    // 创建纹理
+    // 创建纹理（纹理是可以拷贝的）
+//    texture = SDL_CreateTextureFromSurface(renderer, surface);
     texture = createTexture(renderer);
     END(!texture, SDL_CreateTextureFromSurface);
 
-    // 设置渲染目标为window
+    // 设置渲染目标为window（这里注释掉的话会崩溃）
     END(SDL_SetRenderTarget(renderer, nullptr),
         SDL_SetRenderTarget);
 
@@ -146,22 +143,23 @@ void PlayThread::run() {
     // 更新所有的渲染操作到屏幕上
     SDL_RenderPresent(renderer);
 
-    // 等待退出事件
-    while (!isInterruptionRequested()) {
-        SDL_Event event;
-        SDL_WaitEvent(&event);
-        switch (event.type) {
-            case SDL_QUIT:
-                goto end;
-            case SDL_MOUSEBUTTONUP:
-                showClick(event, renderer, texture);
-                break;
-        }
-    }
+    // 等待退出事件（只要线程不退出，就不关闭）
+//    while (!isInterruptionRequested()) {
+//        SDL_Event event;
+//        SDL_WaitEvent(&event);
+//        switch (event.type) {
+//            case SDL_QUIT:
+//                goto end;
+//            case SDL_MOUSEBUTTONUP:
+//                showClick(event, renderer, texture);
+//                break;
+//        }
+//    }
 
 end:
-    SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+      qDebug()  << "end -----";
+//    SDL_DestroyTexture(texture);
+//    SDL_DestroyRenderer(renderer);
+//    SDL_DestroyWindow(window);
+//    SDL_Quit();
 }

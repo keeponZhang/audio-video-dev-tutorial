@@ -15,6 +15,7 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void run2();
 
 private slots:
     void on_playButton_clicked();

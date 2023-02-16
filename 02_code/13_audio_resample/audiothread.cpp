@@ -60,6 +60,7 @@ void AudioThread::run() {
     ras2.filename =FILEPATH_FILE2;
     ras2.sampleFmt = AV_SAMPLE_FMT_FLT;
     ras2.sampleRate = 48000;
+//    单声道
     ras2.chLayout = AV_CH_LAYOUT_MONO;
 
     ResampleAudioSpec ras3;

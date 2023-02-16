@@ -39,7 +39,7 @@ typedef struct {
     uint8_t dataChunkId[4] = {'d', 'a', 't', 'a'};
     // data chunk的data大小：音频数据的总长度，即文件总长度减去文件头的长度(一般是44)
     uint32_t dataChunkDataSize;
-} WAVHeader;
+}   WAVHeader;
 
 class FFmpegs {
 public:

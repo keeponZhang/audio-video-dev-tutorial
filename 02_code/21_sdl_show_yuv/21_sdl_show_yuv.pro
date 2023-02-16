@@ -37,10 +37,10 @@ win32 {
 }
 
 mac {
-    SDL_HOME = /usr/local/Cellar/sdl2/2.0.14_1
+SDL_HOME = /usr/local/sdl2
 }
 
 INCLUDEPATH += $${SDL_HOME}/include
 
-LIBS += -L$${SDL_HOME}/lib \
+LIBS += -L $${SDL_HOME}/lib \
         -lSDL2

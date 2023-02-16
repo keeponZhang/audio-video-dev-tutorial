@@ -6,9 +6,9 @@
 static int yuvIdx = 0;
 static Yuv yuvs[] = {
     {
-        "F:/res/dragon_ball.yuv",
+        "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/25_yuv_player_qt/record.yuv",
         640, 480,
-        AV_PIX_FMT_YUV420P,
+        AV_PIX_FMT_YUYV422,
         30
     },
     {

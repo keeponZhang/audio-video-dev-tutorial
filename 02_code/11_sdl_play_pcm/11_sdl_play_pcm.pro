@@ -37,10 +37,17 @@ win32 {
 }
 
 mac {
- SDL_HOME = /opt/homebrew/Cellar/sdl2/2.24.1
+ SDL_HOME = /opt/homebrew/opt/sdl2
+ FFMPEG_HOME = /usr/local/ffmpeg
+
 }
 
 INCLUDEPATH += $${SDL_HOME}/include
 
-LIBS += -L $${SDL_HOME}/lib \
+LIBS += -L$${SDL_HOME}/lib \
         -lSDL2
+INCLUDEPATH += $${FFMPEG_HOME}/include
+
+LIBS += -L$${FFMPEG_HOME}/lib \
+        -lswresample \
+        -lavutil

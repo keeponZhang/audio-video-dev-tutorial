@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QPainter>
 #include "ffmpegs.h"
-
 extern "C" {
 #include <libavutil/imgutils.h>
 }
@@ -152,6 +151,7 @@ void YuvPlayer::timerEvent(QTimerEvent *event) {
             _yuv.width, _yuv.height,
             _yuv.pixelFormat
         };
+         qDebug() << "yuv参数" << _yuv.width << _yuv.height << _yuv.pixelFormat ;
         RawVideoFrame out = {
             nullptr,
             _yuv.width >> 4 << 4,

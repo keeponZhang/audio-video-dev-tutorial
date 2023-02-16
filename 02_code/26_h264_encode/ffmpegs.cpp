@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QFile>
 
+#define __STDC_CONSTANT_MACROS
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavutil/avutil.h>
@@ -73,7 +74,7 @@ void FFmpegs::h264Encode(VideoEncodeSpec &in,
     int ret = 0;
 
     // 编码器
-    AVCodec *codec = nullptr;
+    const AVCodec  *codec = nullptr;
 
     // 编码上下文
     AVCodecContext *ctx = nullptr;

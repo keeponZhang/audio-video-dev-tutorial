@@ -3,15 +3,16 @@
 
 #include <QThread>
 
-class PlayThread : public QThread {
-    Q_OBJECT
+class PlayThread  {
+
 private:
-    void run();
     void *_winId;
 
 public:
     explicit PlayThread(void *winId, QObject *parent = nullptr);
     ~PlayThread();
+    void run();
+
 
 signals:
 

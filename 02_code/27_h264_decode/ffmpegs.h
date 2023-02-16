@@ -1,6 +1,7 @@
 #ifndef FFMPEGS_H
 #define FFMPEGS_H
 
+#define __STDC_CONSTANT_MACROS
 extern "C" {
 #include <libavutil/avutil.h>
 }

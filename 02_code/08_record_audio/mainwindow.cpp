@@ -25,9 +25,8 @@ extern "C" {
 #else
     #define FMT_NAME "avfoundation"
     #define DEVICE_NAME ":0"
-    #define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/out.pcm"
+    #define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/08_record_audio/out.pcm"
 #endif
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
@@ -77,7 +76,7 @@ void MainWindow::on_audioButton_clicked() {
     }
 
     // 采集的次数
-    int count = 10;
+    int count = 100;
 
     // 数据包
 //    AVPacket pkt;
@@ -91,9 +90,11 @@ void MainWindow::on_audioButton_clicked() {
             // 将数据写入文件
 
             file.write((const char *) pkt->data, pkt->size);
+              qDebug() << "将数据写入文件pkt->size="  <<  pkt->size;
             count--;
 
         } else if (ret == AVERROR(EAGAIN)) { // 资源临时不可用
+              qDebug() << "资源临时不可用 error"  << ret;
             continue;
         } else { // 其他错误
             char errbuf[1024];
@@ -118,6 +119,8 @@ void MainWindow::on_audioButton_clicked() {
    qDebug() << "释放资源" << FILENAME;
     // 释放资源
     // 关闭文件
+   av_packet_free(&pkt);
+
     file.close();
 
     // 关闭设备

@@ -37,7 +37,7 @@ win32 {
 }
 
 mac {
-SDL_HOME = /opt/homebrew/Cellar/sdl2/2.24.1
+SDL_HOME = /usr/local/sdl2
 
 }
 

@@ -9,17 +9,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 创建播放器
     _player = new YuvPlayer(this);
-    int w = 400;
-    int h = 400;
+    int w = 640;
+    int h = 480;
     int x = (width() - w) >> 1;
     int y = (height() - h) >> 1;
     _player->setGeometry(x, y, w, h);
 
     // 设置需要播放的文件
     Yuv yuv = {
-        "F:/res/dragon_ball.yuv",
+        "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/24_yuv_player/record.yuv",
         640, 480,
-        AV_PIX_FMT_YUV420P,
+        AV_PIX_FMT_YUYV422,
         30
     };
     _player->setYuv(yuv);

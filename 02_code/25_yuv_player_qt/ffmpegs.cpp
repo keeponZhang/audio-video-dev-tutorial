@@ -1,3 +1,4 @@
+#define __STDC_CONSTANT_MACROS
 #include "ffmpegs.h"
 #include <QDebug>
 #include <QFile>

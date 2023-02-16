@@ -9,10 +9,14 @@
         return; \
     }
 
-#define FILENAME "F:/res/dragon_ball.yuv"
-#define PIXEL_FORMAT SDL_PIXELFORMAT_IYUV
+#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/23_sdl_play_yuv/record.yuv"y
+//yuyv422格式
+//#define PIXEL_FORMAT SDL_PIXELFORMAT_YUY2
+#define PIXEL_FORMAT SDL_PIXELFORMAT_YUY2
+
 #define IMG_W 640
 #define IMG_H 480
+//    ffplay -video_size 640x480 -pixel_format yuyv422 -framerate 30 out.yuv
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -56,11 +60,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {
     delete ui;
 
-    _file.close();
-    SDL_DestroyTexture(_texture);
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
-    SDL_Quit();
+//    _file.close();
+//    SDL_DestroyTexture(_texture);
+//    SDL_DestroyRenderer(_renderer);
+//    SDL_DestroyWindow(_window);
+//    SDL_Quit();
 }
 
 void MainWindow::on_playButton_clicked() {

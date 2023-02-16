@@ -19,5 +19,5 @@ void MainWindow::on_playButton_clicked() {
 //    PlayThread *thread = new PlayThread((void *) ui->label->winId(), this);
 
     PlayThread *thread = new PlayThread((void *) _widget->winId(), this);
-    thread->start();
+    thread->run();
 }

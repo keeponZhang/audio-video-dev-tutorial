@@ -40,6 +40,8 @@ void FFmpegs::resampleAudio(const char *inFilename,
     QFile inFile(inFilename);
     QFile outFile(outFilename);
 
+//    这里变量全部写在前面，方便后面end处理
+
     // 输入缓冲区
     // 指向缓冲区的指针
     uint8_t **inData = nullptr;
@@ -78,6 +80,7 @@ void FFmpegs::resampleAudio(const char *inFilename,
 
     // 返回结果
     int ret = 0;
+
 
     // 创建重采样上下文
     SwrContext *ctx = swr_alloc_set_opts(nullptr,
@@ -119,6 +122,7 @@ void FFmpegs::resampleAudio(const char *inFilename,
 
     // uint8_t **inData = av_calloc(1, sizeof(uint8_t *));
 
+    //  inChs,inSamples,inSampleFmt决定创建的缓冲区多大（inSampleFmt：采样格式）
     // 创建输入缓冲区
     ret = av_samples_alloc_array_and_samples(
               &inData,
@@ -132,6 +136,14 @@ void FFmpegs::resampleAudio(const char *inFilename,
         qDebug() << "av_samples_alloc_array_and_samples error:" << errbuf;
         goto end;
     }
+      qDebug() << "inChs =:" << inChs;
+      qDebug() << "inSamples =:" << inSamples;
+        qDebug() << "inSampleFmt =:" << inSampleFmt;
+        // 每一个样本的一个声道占用多少个字节
+        qDebug() <<"av_get_bytes_per_sample(inSampleFmt)每一个样本的一个声道占用多少个字节="<< av_get_bytes_per_sample(inSampleFmt);
+//        一个样本的大小是乘以声道数的
+            qDebug() << " 一个样本的大小 inBytesPerSample =:" << inBytesPerSample;
+      qDebug() << "inLinesize =:" << inLinesize;
 
     // 创建输出缓冲区
     ret = av_samples_alloc_array_and_samples(
@@ -146,7 +158,14 @@ void FFmpegs::resampleAudio(const char *inFilename,
         qDebug() << "av_samples_alloc_array_and_samples error:" << errbuf;
         goto end;
     }
-
+    qDebug() << "outChs =:" << outChs;
+    qDebug() << "outSamples =:" << outSamples;
+      qDebug() << "outSampleFmt =:" << outSampleFmt;
+//      （重点）采样率高，样本数量也会增大
+      // 每一个样本的一个声道占用多少个字节
+      qDebug() <<"av_get_bytes_per_sample(outSampleFmt)每一个样本的一个声道占用多少个字节="<< av_get_bytes_per_sample(outSampleFmt);
+         qDebug() << " 一个样本的大小 outBytesPerSample =:" << outBytesPerSample;
+    qDebug() << "outLinesize =:" << outLinesize;
     // 打开文件
     if (!inFile.open(QFile::ReadOnly)) {
         qDebug() << "file open error:" << inFilename;
@@ -160,7 +179,7 @@ void FFmpegs::resampleAudio(const char *inFilename,
     // 读取文件数据
     // inData[0] == *inData
     while ((len = inFile.read((char *) inData[0], inLinesize)) > 0) {
-        // 读取的样本数量
+        // 读取的样本数量（这里要处理一下，因为到了后面并不一定会填满缓冲区）
         inSamples = len / inBytesPerSample;
 
         // 重采样(返回值转换后的样本数量)

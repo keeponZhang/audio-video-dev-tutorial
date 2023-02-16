@@ -3,7 +3,10 @@
 #include <SDL2/SDL.h>
 #include <QDebug>
 #include <QFile>
-
+extern "C" {
+#include <libavutil/avutil.h>
+#include <libswresample/swresample.h>
+}
 #ifdef Q_OS_WIN
 #define FILENAME "F:/in.pcm"
 // 采样率
@@ -21,7 +24,7 @@
 // 文件缓冲区的大小
 #define BUFFER_SIZE (SAMPLES * BYTES_PER_SAMPLE)
 #else
-#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/in.pcm"
+#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/11_sdl_play_pcm/in.pcm"
 // 采样率
 // 采样率
 #define SAMPLE_RATE 44100
@@ -41,7 +44,7 @@
 
 
 
-
+//len，data都是会变的
 typedef struct {
     int len = 0;
     int pullLen = 0;
@@ -104,6 +107,7 @@ void PlayThread::run() {
         qDebug() << "SDL_Init error" << SDL_GetError();
         return;
     }
+    qDebug() << "SDL_Init";
 
     // 音频参数
     SDL_AudioSpec spec;
@@ -115,12 +119,24 @@ void PlayThread::run() {
     spec.channels = CHANNELS;
     // 音频缓冲区的样本数量（这个值必须是2的幂）
     spec.samples = SAMPLES;
+
+
     // 回调
     spec.callback = pull_audio_data;
     // 传递给回调的参数
     AudioBuffer buffer;
     spec.userdata = &buffer;
 
+    //    希望填充的大小(samples * format * channels / 8)
+
+    int formatSizeBit = SDL_AUDIO_BITSIZE(spec.format);
+    int bytesPerSample = (formatSizeBit * spec.channels) >> 3;
+    qDebug() << "SDL_OpenAudio bytesPerSample=" << bytesPerSample;
+    int formatSizeByte = bytesPerSample;
+//    这个公式是av_format的
+// Uint8  format = av_get_bytes_per_sample(SAMPLE_FORMAT);
+int hopeLength = (SAMPLES * formatSizeByte * CHANNELS );
+   qDebug() << "SDL_OpenAudio hopeLength" << hopeLength;
     // 打开设备
     if (SDL_OpenAudio(&spec, nullptr)) {
         qDebug() << "SDL_OpenAudio error" << SDL_GetError();

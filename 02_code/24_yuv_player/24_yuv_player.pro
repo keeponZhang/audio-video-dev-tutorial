@@ -44,7 +44,8 @@ win32 {
 
 mac {
     FFMPEG_HOME = /usr/local/ffmpeg
-    SDL_HOME = /usr/local/Cellar/sdl2/2.0.14_1
+#    SDL_HOME = /usr/local/Cellar/sdl2/2.0.14_1
+     SDL_HOME = /usr/local/sdl2
 
     INCLUDEPATH += $${FFMPEG_HOME}/include
     LIBS += -L$${FFMPEG_HOME}/lib \

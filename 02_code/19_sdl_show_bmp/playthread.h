@@ -3,14 +3,13 @@
 
 #include <QThread>
 
-class PlayThread : public QThread {
-    Q_OBJECT
-private:
-    void run();
+class PlayThread {
+
 
 public:
     explicit PlayThread(QObject *parent = nullptr);
     ~PlayThread();
+      void run();
 
 signals:
 

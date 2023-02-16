@@ -102,18 +102,22 @@ void AudioThread::run() {
         header.audioFormat = AUDIO_FORMAT_FLOAT;
     }
     header.blockAlign = header.bitsPerSample * header.numChannels >> 3;
+//    每秒钟处理多少字节
     header.byteRate = header.sampleRate * header.blockAlign;
 //    header.dataChunkDataSize = 0;
     file.write((char *) &header, sizeof (WAVHeader));
-
+    qDebug() << "sizeof (WAVHeader)=" <<sizeof (WAVHeader);
+    qDebug() << "header.dataChunkDataSize=" <<header.dataChunkDataSize;
+ qDebug() << "准备录制" ;
     // 数据包
     AVPacket *pkt = av_packet_alloc();
     while (!isInterruptionRequested()) {
         // 不断采集数据
         ret = av_read_frame(ctx, pkt);
-
         if (ret == 0) { // 读取成功
             // 将数据写入文件
+//            qDebug() << "不断采集数据 将数据写入文件=" <<pkt->size;
+
             file.write((const char *) pkt->data, pkt->size);
 
             // 计算录音时长
@@ -133,19 +137,30 @@ void AudioThread::run() {
         }
     }
 
-//    qDebug() << file.size() << header.dataChunkDataSize;
+    qDebug() << "file.size()=" << file.size();
+    qDebug() << "header.dataChunkDataSize=" << header.dataChunkDataSize;
 
 //    int size = file.size();
 
-    // 写入dataChunkDataSize
+    // 写入dataChunkDataSize（dataChunkDataSize也可以用下面的公式算，不用累加）
 //    header.dataChunkDataSize = size - sizeof (WAVHeader);
+     qDebug() << "after sizeof (WAVHeader)=" << sizeof (WAVHeader);
+     qDebug() << "after sizeof (header.dataChunkDataSize)=" << sizeof (header.dataChunkDataSize);
+//dataChunkDataSize是最后四个字节，所以可以这样写
     file.seek(sizeof (WAVHeader) - sizeof (header.dataChunkDataSize));
     file.write((char *) &header.dataChunkDataSize, sizeof (header.dataChunkDataSize));
 
-    // 写入riffChunkDataSize
+
+    qDebug() << "after sizeof (header.riffChunkId)=" << sizeof (header.riffChunkId);
+    qDebug() << "after header.riffChunkDataSize=" << header.riffChunkDataSize;
+
+    qDebug() << "after sizeof (header.riffChunkDataSize)=" << sizeof (header.riffChunkDataSize);
+    // 写入riffChunkDataSize，之所以要减去riffChunkDataSize，是因为就是这样定义的，riffChunkDataSize存储的就是除了id跟data size之后的大小
     header.riffChunkDataSize = file.size()
                                - sizeof (header.riffChunkId)
                                - sizeof (header.riffChunkDataSize);
+
+
     file.seek(sizeof (header.riffChunkId));
     file.write((char *) &header.riffChunkDataSize, sizeof (header.riffChunkDataSize));
 

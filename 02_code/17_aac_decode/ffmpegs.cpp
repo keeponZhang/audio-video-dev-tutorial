@@ -75,7 +75,7 @@ void FFmpegs::aacDecode(const char *inFilename,
     const AVCodec *codec = nullptr;
     // 上下文
     AVCodecContext *ctx = nullptr;
-    // 解析器上下文
+    // 解析器上下文(解码比编码多的)
     AVCodecParserContext *parserCtx = nullptr;
 
     // 存放解码前的数据(aac)
@@ -90,7 +90,7 @@ void FFmpegs::aacDecode(const char *inFilename,
         return;
     }
 
-    // 初始化解析器上下文
+    // 初始化解析器上下文（里面会创建一个parser）
     parserCtx = av_parser_init(codec->id);
     if (!parserCtx) {
         qDebug() << "av_parser_init error";
@@ -192,7 +192,7 @@ void FFmpegs::aacDecode(const char *inFilename,
 //        // 减去已经解析过的数据大小
 //        inLen -= ret;
 
-//        // 解码
+//        // 解码（这个要放在前面）
 //        if (pkt->size > 0 && decode(ctx, pkt, frame, outFile) < 0) {
 //            goto end;
 //        }

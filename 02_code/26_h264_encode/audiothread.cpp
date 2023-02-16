@@ -22,11 +22,11 @@ AudioThread::~AudioThread() {
 
 void AudioThread::run() {
     VideoEncodeSpec in;
-    in.filename = "F:/res/dragon_ball.yuv";
+    in.filename = "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/26_h264_encode/in.yuv";
     in.width = 640;
     in.height = 480;
     in.fps = 30;
     in.pixFmt = AV_PIX_FMT_YUV420P;
 
-    FFmpegs::h264Encode(in, "F:/res/dragon_ball.h264");
+    FFmpegs::h264Encode(in, "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/26_h264_encode/encode.h264");
 }

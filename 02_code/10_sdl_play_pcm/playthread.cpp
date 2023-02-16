@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QFile>
 
-#define FILENAME "F:/in.pcm"
+#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/10_sdl_play_pcm/in.pcm"
 #define SAMPLE_RATE 44100
 #define SAMPLE_SIZE 16
 #define CHANNELS 2
@@ -66,7 +66,7 @@ void PlayThread::run() {
         qDebug() << "SDL_Init error" << SDL_GetError();
         return;
     }
-
+  qDebug() << "SDL_Init";
     // 音频参数
     SDL_AudioSpec spec;
     // 采样率
@@ -79,7 +79,7 @@ void PlayThread::run() {
     spec.samples = 1024;
     // 回调
     spec.callback = pull_audio_data;
-    spec.userdata = 100;
+//    spec.userdata = 100;
 
     // 打开设备
     if (SDL_OpenAudio(&spec, nullptr)) {

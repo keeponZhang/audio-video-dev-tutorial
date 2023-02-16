@@ -26,9 +26,9 @@ AudioThread::~AudioThread() {
 
 void AudioThread::run() {
     VideoDecodeSpec out;
-    out.filename = "F:/res/out.yuv";
+    out.filename = "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/27_h264_decode/decode.yuv";
 
-    FFmpegs::h264Decode("F:/res/in.h264", out);
+    FFmpegs::h264Decode("/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/27_h264_decode/encode.h264", out);
 
     qDebug() << out.width << out.height
              << out.fps << av_get_pix_fmt_name(out.pixFmt);

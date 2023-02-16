@@ -10,23 +10,19 @@
         goto end; \
     }
 
-#define FILENAME "F:/res/in.yuv"
+#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/22_sdl_show_yuv_embed/out.yuv"
 #define PIXEL_FORMAT SDL_PIXELFORMAT_IYUV
 #define IMG_W 512
 #define IMG_H 512
 
 PlayThread::PlayThread(void *winid, QObject *parent)
-    : QThread(parent), _winId(winid) {
-    connect(this, &PlayThread::finished,
-            this, &PlayThread::deleteLater);
+    : _winId(winid) {
+
 
 }
 
 PlayThread::~PlayThread() {
-    disconnect();
-    requestInterruption();
-    quit();
-    wait();
+
 
     qDebug() << this << "析构了";
 }
@@ -47,7 +43,7 @@ void PlayThread::run() {
     // 初始化子系统
     END(SDL_Init(SDL_INIT_VIDEO), SDL_Init);
 
-    // 创建窗口
+    // 创建窗口（可以通过_winId来创建窗口），_winId是跟平台相关
     window = SDL_CreateWindowFrom(_winId);
     END(!window, SDL_CreateWindow);
 
@@ -96,19 +92,19 @@ void PlayThread::run() {
     SDL_RenderPresent(renderer);
 
     // 等待退出事件
-    while (!isInterruptionRequested()) {
-        SDL_Event event;
-        SDL_WaitEvent(&event);
-        switch (event.type) {
-            case SDL_QUIT:
-                goto end;
-        }
-    }
+//    while (!isInterruptionRequested()) {
+//        SDL_Event event;
+//        SDL_WaitEvent(&event);
+//        switch (event.type) {
+//            case SDL_QUIT:
+//                goto end;
+//        }
+//    }
 
 end:
     file.close();
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+//    SDL_DestroyWindow(window);
+//    SDL_Quit();
 }

@@ -44,6 +44,6 @@ FFMPEG_HOME = /usr/local/ffmpeg
 
 INCLUDEPATH += $${FFMPEG_HOME}/include
 
-LIBS += -L $${FFMPEG_HOME}/lib \
+LIBS += -L$${FFMPEG_HOME}/lib \
         -lswresample \
         -lavutil

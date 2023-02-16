@@ -1,7 +1,7 @@
 #include "ffmpegs.h"
 #include <QDebug>
 #include <QFile>
-
+#define __STDC_CONSTANT_MACROS
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavutil/avutil.h>
@@ -100,7 +100,7 @@ void FFmpegs::h264Decode(const char *inFilename,
     QFile outFile(out.filename);
 
     // 解码器
-    AVCodec *codec = nullptr;
+    const AVCodec *codec = nullptr;
     // 上下文
     AVCodecContext *ctx = nullptr;
     // 解析器上下文

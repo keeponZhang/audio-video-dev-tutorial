@@ -20,11 +20,11 @@ void MainWindow::on_audioButton_clicked() {
         connect(_audioThread, &AudioThread::finished,
         [this]() { // 线程结束
             _audioThread = nullptr;
-            ui->audioButton->setText("开始录音");
+            ui->audioButton->setText("开始转码");
         });
 
         // 设置按钮文字
-        ui->audioButton->setText("结束录音");
+        ui->audioButton->setText("结束转码");
     } else { // 点击了“结束录音”
         // 结束线程
 //        _audioThread->setStop(true);
@@ -32,7 +32,7 @@ void MainWindow::on_audioButton_clicked() {
         _audioThread = nullptr;
 
         // 设置按钮文字
-        ui->audioButton->setText("开始录音");
+        ui->audioButton->setText("开始转码");
     }
 
 }

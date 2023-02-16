@@ -5,6 +5,8 @@
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavutil/avutil.h>
+#include <libavformat/avformat.h>
+
 }
 
 #define ERROR_BUF(ret) \
@@ -15,7 +17,7 @@ FFmpegs::FFmpegs() {
 
 }
 
-// 检查采样格式
+// 检查采样格式，源码示例这样写的
 static int check_sample_fmt(const AVCodec *codec,
                             enum AVSampleFormat sample_fmt) {
     const enum AVSampleFormat *p = codec->sample_fmts;
@@ -28,6 +30,7 @@ static int check_sample_fmt(const AVCodec *codec,
     return 0;
 }
 
+//输入缓冲区，输出缓冲区
 // 音频编码
 // 返回负数：中途出现了错误
 // 返回0：编码操作正常完成
@@ -46,9 +49,11 @@ static int encode(AVCodecContext *ctx,
     // 不断从编码器中取出编码后的数据
     // while (ret >= 0)
     while (true) {
+//        分多次去拿
         ret = avcodec_receive_packet(ctx, pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
             // 继续读取数据到frame，然后送到编码器
+//            退出编码
             return 0;
         } else if (ret < 0) { // 其他错误
             return ret;
@@ -86,6 +91,7 @@ void FFmpegs::aacEncode(AudioEncodeSpec &in,
 
     // 获取编码器
 //    codec = avcodec_find_encoder(AV_CODEC_ID_AAC);
+//    通过名字来找
     codec = avcodec_find_encoder_by_name("libfdk_aac");
     if (!codec) {
         qDebug() << "encoder not found";
@@ -112,10 +118,9 @@ void FFmpegs::aacEncode(AudioEncodeSpec &in,
     ctx->sample_fmt = in.sampleFmt;
     ctx->channel_layout = in.chLayout;
     // 比特率
-    ctx->bit_rate = 32000;
+    ctx->bit_rate = 64000;
     // 规格
     ctx->profile = FF_PROFILE_AAC_HE_V2;
-
     // 打开编码器
 //    AVDictionary *options = nullptr;
 //    av_dict_set(&options, "vbr", "5", 0);
@@ -134,6 +139,7 @@ void FFmpegs::aacEncode(AudioEncodeSpec &in,
         goto end;
     }
 
+//    把ctx的一些参数设置frame
     // frame缓冲区中的样本帧数量（由ctx->frame_size决定）
     frame->nb_samples = ctx->frame_size;
     frame->format = ctx->sample_fmt;
@@ -164,11 +170,21 @@ void FFmpegs::aacEncode(AudioEncodeSpec &in,
         goto end;
     }
 
+    qDebug() << "  frame->nb_samples]=" <<   frame->nb_samples;
+    qDebug() << "  frame->format]=" <<   frame->format;
+
+
+    qDebug() << "  perSampleByte=" <<  av_get_bytes_per_sample(ctx->sample_fmt);
+
+    qDebug() << "  frame->channels]=" <<   frame->channels;
+
+    qDebug() << " frame->linesize[0]=" <<  frame->linesize[0];
     // 读取数据到frame中
     while ((ret = inFile.read((char *) frame->data[0],
                               frame->linesize[0])) > 0) {
         // 从文件中读取的数据，不足以填满frame缓冲区
         if (ret < frame->linesize[0]) {
+//            算出来是单声道的字节
             int bytes = av_get_bytes_per_sample((AVSampleFormat) frame->format);
             int ch = av_get_channel_layout_nb_channels(frame->channel_layout);
             // 设置真正有效的样本帧数量
@@ -194,6 +210,7 @@ end:
     av_frame_free(&frame);
     av_packet_free(&pkt);
     avcodec_free_context(&ctx);
+
 
     qDebug() << "线程正常结束";
 }

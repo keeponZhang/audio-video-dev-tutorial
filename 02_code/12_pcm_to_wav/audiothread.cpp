@@ -24,7 +24,7 @@ extern "C" {
 #else
     #define FMT_NAME "avfoundation"
     #define DEVICE_NAME ":0"
-    #define FILEPATH "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/out.pcm"
+    #define FILEPATH "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/12_pcm_to_wav/"
 #endif
 
 AudioThread::AudioThread(QObject *parent) : QThread(parent) {
@@ -91,41 +91,45 @@ void AudioThread::run() {
     // showSpec(ctx);
 
     // 文件名
-    QString filename = FILEPATH;
-    filename += QDateTime::currentDateTime().toString("MM_dd_HH_mm_ss");
-    QString wavFilename = filename;
-    filename += ".pcm";
-    wavFilename += ".wav";
+    QString filenPath = FILEPATH;
+    QString wavFilename =filenPath + QDateTime::currentDateTime().toString("MM_dd_HH_mm_ss");
+//    wavFilename += "_out.wav";
+//     QString filename =filenPath+"48000_f32le_1.pcm";
+
+     wavFilename += "_music_out.wav";
+      QString filename =filenPath+"44100_s16le_2_music.pcm";
     QFile file(filename);
+  qDebug() << "wavFilename=" << wavFilename;
+  qDebug() << "filename=" << filename;
 
     // 打开文件
     // WriteOnly：只写模式。如果文件不存在，就创建文件；如果文件存在，就会清空文件内容
-    if (!file.open(QFile::WriteOnly)) {
-        qDebug() << "文件打开失败" << filename;
+//    if (!file.open(QFile::WriteOnly)) {
+//        qDebug() << "文件打开失败" << filename;
 
-        // 关闭设备
-        avformat_close_input(&ctx);
-        return;
-    }
+//        // 关闭设备
+//        avformat_close_input(&ctx);
+//        return;
+//    }
 
     // 数据包
-    AVPacket pkt;
-    while (!isInterruptionRequested()) {
-        // 不断采集数据
-        ret = av_read_frame(ctx, &pkt);
+//    AVPacket pkt;
+//    while (!isInterruptionRequested()) {
+//        // 不断采集数据
+//        ret = av_read_frame(ctx, &pkt);
 
-        if (ret == 0) { // 读取成功
-            // 将数据写入文件
-            file.write((const char *) pkt.data, pkt.size);
-        } else if (ret == AVERROR(EAGAIN)) { // 资源临时不可用
-            continue;
-        } else { // 其他错误
-            char errbuf[1024];
-            av_strerror(ret, errbuf, sizeof (errbuf));
-            qDebug() << "av_read_frame error" << errbuf << ret;
-            break;
-        }
-    }
+//        if (ret == 0) { // 读取成功
+//            // 将数据写入文件
+//            file.write((const char *) pkt.data, pkt.size);
+//        } else if (ret == AVERROR(EAGAIN)) { // 资源临时不可用
+//            continue;
+//        } else { // 其他错误
+//            char errbuf[1024];
+//            av_strerror(ret, errbuf, sizeof (errbuf));
+//            qDebug() << "av_read_frame error" << errbuf << ret;
+//            break;
+//        }
+//    }
 //    while (!_stop && av_read_frame(ctx, &pkt) == 0) {
 //        // 将数据写入文件
 //        file.write((const char *) pkt.data, pkt.size);
@@ -133,9 +137,9 @@ void AudioThread::run() {
 
     // 释放资源
     // 关闭文件
-    file.close();
+//    file.close();
 
-    // 获取输入流
+    // 获取输入流(获取的是该设备的，所以转码音乐会有问题)
     AVStream *stream = ctx->streams[0];
     // 获取音频参数
     AVCodecParameters *params = stream->codecpar;
@@ -148,6 +152,16 @@ void AudioThread::run() {
     if (params->codec_id >= AV_CODEC_ID_PCM_F32BE) {
         header.audioFormat = AUDIO_FORMAT_FLOAT;
     }
+//music
+        header.sampleRate = 44100;
+        header.bitsPerSample = 16;
+        header.numChannels = 2;
+        header.audioFormat = 1;
+    qDebug() << "header.sampleRate=" <<  header.sampleRate;
+    qDebug() << "header.bitsPerSample=" <<  header.bitsPerSample;
+    qDebug() << "header.numChannels=" <<  header.numChannels;
+    qDebug() << "header.audioFormat=" <<  header.audioFormat;
+
     FFmpegs::pcm2wav(header,
                      filename.toUtf8().data(),
                      wavFilename.toUtf8().data());

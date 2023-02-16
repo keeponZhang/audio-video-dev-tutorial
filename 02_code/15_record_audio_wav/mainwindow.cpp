@@ -17,6 +17,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::onTimeChanged(unsigned long long ms) {
+//    这里用的QTime
     QTime time(0, 0, 0, 0);
     QString text = time.addMSecs(ms).toString("mm:ss.z");
     ui->timeLabel->setText(text.left(7));

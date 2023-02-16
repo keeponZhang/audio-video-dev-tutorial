@@ -65,10 +65,14 @@ void AudioThread::run() {
     AVFormatContext *ctx = nullptr;
 
     // 设备参数
+//    ffplay -video_size 640x480 -pixel_format yuyv422 -framerate 30 out.yuv
+
     AVDictionary *options = nullptr;
     av_dict_set(&options, "video_size", "640x480", 0);
     av_dict_set(&options, "pixel_format", "yuyv422", 0);
     av_dict_set(&options, "framerate", "30", 0);
+
+ //    ffplay -video_size 1280x720 -pixel_format yuyv422 -framerate 30 out.yuv
 
 //    av_dict_set(&options, "video_size", "1280x720", 0);
 //    av_dict_set(&options, "pixel_format", "yuyv422", 0);
@@ -98,6 +102,7 @@ void AudioThread::run() {
     AVCodecParameters *params = ctx->streams[0]->codecpar;
     AVPixelFormat pixFmt = (AVPixelFormat) params->format;
 
+//    avpicture_get_size() 已过期
     int imageSize = av_image_get_buffer_size(
                         pixFmt,
                         params->width,
@@ -122,7 +127,9 @@ void AudioThread::run() {
 
             // windows：614400
             // mac：615680
-            // qDebug() << pkt->size;
+//            下面这2个是一样的
+             qDebug()<<"pkt->size=" << pkt->size;
+             qDebug()<<"imageSize=" << imageSize;
 
             // 释放资源
             av_packet_unref(pkt);
