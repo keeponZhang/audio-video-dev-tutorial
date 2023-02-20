@@ -1,4 +1,4 @@
-#ifndef YUVPLAYER_H
+ #ifndef YUVPLAYER_H
 #define YUVPLAYER_H
 
 #include <QWidget>

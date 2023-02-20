@@ -30,6 +30,17 @@
 
 RIFF chunk除去data chunk的data（音频数据）后，剩下的内容可以称为：WAV文件头，一般是44字节。
 
+[WAV的文件格式](http://soundfile.sapp.org/doc/WaveFormat/)如下图所示，前面有44个字节的文件头，紧跟在后面的就是音频数据（比如PCM数据）。
+
+![WAV文件格式](https://img2020.cnblogs.com/blog/497279/202103/497279-20210311190649736-42996929.gif)
+
+![WAV文件格式](https://img2020.cnblogs.com/blog/497279/202103/497279-20210311190654247-121239230.gif)
+
+- NumChannels：声道数
+- SampleRate：采样率（Hz）
+- ByteRate：每秒多少个字节（Byte/s）
+- BitsPerSample：位深度
+
 ## 命令行
 
 通过下面的命令可以将PCM转成WAV。

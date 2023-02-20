@@ -106,10 +106,10 @@ void MainWindow::on_audioButton_clicked() {
 
 
 
-//        if(av_read_frame(ctx, pkt) != 0){
-//            sleep(1);
-//            continue;
-//        }
+        if(av_read_frame(ctx, pkt) != 0){
+            sleep(1);
+            continue;
+        }
 //         qDebug() << "将数据写入文件" << FILENAME;
 //        // 将数据写入文件
 //        file.write((const char *) pkt->data, pkt->size);

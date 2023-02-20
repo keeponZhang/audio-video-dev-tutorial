@@ -4,15 +4,16 @@
 #include <QDebug>
 #include <QFile>
 
-#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/10_sdl_play_pcm/in.pcm"
+#define FILENAME "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/_output/in.pcm"
 #define SAMPLE_RATE 44100
 #define SAMPLE_SIZE 16
 #define CHANNELS 2
+//音频缓冲区的大小 SAMPLES*BYTES_PER_SAMPLE =1024*4 =409
 // 音频缓冲区的样本数量
 #define SAMPLES 1024
-// 每个样本占用多少个字节
+// 每个样本占用多少个字节;4个字节 ((SAMPLE_SIZE * CHANNELS) / 8)= 16*2/8 =4
 #define BYTES_PER_SAMPLE ((SAMPLE_SIZE * CHANNELS) / 8)
-// 文件缓冲区的大小
+// 文件缓冲区的大小(SAMPLES * BYTES_PER_SAMPLE) = 1024*4
 #define BUFFER_SIZE (SAMPLES * BYTES_PER_SAMPLE)
 
 PlayThread::PlayThread(QObject *parent) : QThread(parent) {
@@ -42,6 +43,7 @@ void pull_audio_data(void *userdata,
                     ) {
     // 清空stream（静音处理）
     SDL_memset(stream, 0, len);
+       qDebug() << "pull_audio_data len=" << len;
 
     // 文件数据还没准备好
     if (bufferLen <= 0) return;
@@ -126,9 +128,9 @@ void PlayThread::run() {
 //        bufferData = data;
 
 //        // 等待音频数据填充完毕
-//        // 只要音频数据还没有填充完毕，就Delay(sleep)
+//        // 只要音频数据还没有填充完毕，就Delay(sleep)，不delay也行，直接空转，或者像前面一样空转
 //        while (bufferLen > 0) {
-
+//                SDL_Delay(1);
 //        }
 //    }
 

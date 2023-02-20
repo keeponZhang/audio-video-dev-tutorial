@@ -74,7 +74,7 @@ void AudioThread::run() {
 
  //    ffplay -video_size 1280x720 -pixel_format yuyv422 -framerate 30 out.yuv
 
-//    av_dict_set(&options, "video_size", "1280x720", 0);
+//    av_dict_set(&options, "vide o_size", "1280x720", 0);
 //    av_dict_set(&options, "pixel_format", "yuyv422", 0);
 //    av_dict_set(&options, "framerate", "10", 0);
 
@@ -122,6 +122,8 @@ void AudioThread::run() {
         ret = av_read_frame(ctx, pkt);
 
         if (ret == 0) { // 读取成功
+            qDebug() << "av_read_frame 资源正常"  << ret;
+
             // 将数据写入文件
             file.write((const char *) pkt->data, imageSize);
 
@@ -134,6 +136,7 @@ void AudioThread::run() {
             // 释放资源
             av_packet_unref(pkt);
         } else if (ret == AVERROR(EAGAIN)) { // 资源临时不可用
+              qDebug() << "av_read_frame 资源临时不可用"  << ret;
             continue;
         } else { // 其他错误
             ERROR_BUF(ret);

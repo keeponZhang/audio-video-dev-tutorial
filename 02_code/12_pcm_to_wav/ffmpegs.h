@@ -8,30 +8,30 @@
 
 // WAV文件头（44字节）
 typedef struct {
-    // RIFF chunk的id
+    // RIFF chunk的id  4个字节
     uint8_t riffChunkId[4] = {'R', 'I', 'F', 'F'};
-    // RIFF chunk的data大小，即文件总长度减去8字节
+    // RIFF chunk的data大小，即文件总长度减去8字节  4个字节
     uint32_t riffChunkDataSize;
 
-    // "WAVE"
+    // "WAVE"  4个字节
     uint8_t format[4] = {'W', 'A', 'V', 'E'};
 
     /* fmt chunk */
     // fmt chunk的id
     uint8_t fmtChunkId[4] = {'f', 'm', 't', ' '};
-    // fmt chunk的data大小：存储PCM数据时，是16
+    // fmt chunk的data大小：存储PCM数据时，是16，占4个字节
     uint32_t fmtChunkDataSize = 16;
-    // 音频编码，1表示PCM，3表示Floating Point
+    // 音频编码，1表示PCM，3表示Floating Point，占2个字节
     uint16_t audioFormat = AUDIO_FORMAT_PCM;
-    // 声道数
+    // 声道数 2个字节
     uint16_t numChannels;
-    // 采样率
+    // 采样率 4个字节
     uint32_t sampleRate;
-    // 字节率 = sampleRate * blockAlign
+    // 字节率 = sampleRate * blockAlign 4个字节
     uint32_t byteRate;
-    // 一个样本的字节数 = bitsPerSample * numChannels >> 3
+    // 一个样本的字节数 = bitsPerSample * numChannels >> 3  2个字节
     uint16_t blockAlign;
-    // 位深度
+    // 位深度 2个字节
     uint16_t bitsPerSample;
 
     /* data chunk */

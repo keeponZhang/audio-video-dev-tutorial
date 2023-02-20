@@ -24,7 +24,11 @@ extern "C" {
 #else
     #define FMT_NAME "avfoundation"
     #define DEVICE_NAME ":0"
-    #define FILEPATH "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/09_record_audio_sub_thread/out2.pcm"
+    #define FILEPATH "/Users/keeponzhang/Downloads/study/ffmpeg/code/audio-video-dev-tutorial/02_code/_output/out.pcm"
+//ffmpeg -f avfoundation -list_devices true -i ''
+//ffplay -ar 48000 -ac 1 -f f32le out.pcm
+//ffplay -ar 48000 -ac 2 -f f32le out2.pcm 会变声
+
 #endif
 
 AudioThread::AudioThread(QObject *parent) : QThread(parent) {

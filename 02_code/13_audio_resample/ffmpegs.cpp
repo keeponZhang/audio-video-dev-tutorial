@@ -57,7 +57,7 @@ void FFmpegs::resampleAudio(const char *inFilename,
     int len = 0;
 
     // 输出缓冲区
-    // 指向缓冲区的指针
+    // 指向缓冲区的指针，注意这里是**
     uint8_t **outData = nullptr;
     // 缓冲区的大小
     int outLinesize = 0;
